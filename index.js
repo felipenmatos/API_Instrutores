@@ -1,6 +1,7 @@
 const express = require("express");
 
 const app = express();
+app.use(express.json());
 
 // GET /instrutores <= OK
 
@@ -43,6 +44,8 @@ const listaDeInstrutores = [
   },
 ];
 
+let proximoId = 5;
+
 app.get("/instrutores", (req, res) => {
   res.json(listaDeInstrutores);
 });
@@ -52,6 +55,23 @@ app.get("/instrutores/:idConsultado", (req, res) => {
     (instrutor) => instrutor.id === Number(req.params.idConsultado)
   );
   res.json(instrutor);
+});
+
+app.post("/instrutores", (req, res) => {
+  console.log(req.body);
+
+  const novoInstrutor = {
+    id: proximoId,
+    nome: req.body.nome,
+    idade: req.body.idade,
+    areaDeAtuacao: req.body.areaDeAtuacao,
+  };
+
+  listaDeInstrutores.push(novoInstrutor);
+
+  proximoId += 1;
+
+  res.json(novoInstrutor);
 });
 
 app.listen(8000);
